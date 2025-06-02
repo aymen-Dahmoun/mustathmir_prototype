@@ -6,9 +6,6 @@ import supabase from './supabaseClient';
 import SignUpScreen from './screens/authScreens/SignUp';
 import LoginScreen from './screens/authScreens/Login';
 
-// import ProjectsList from '../screens/investor/ProjectsList';
-// import OwnerProfile from '../screens/owner/OwnerProfile';
-// import InvestorsList from '../screens/owner/InvestorsList';
 import Profile from './screens/commonScreens/Profile';
 import { useAuth } from './context/AuthProvider';
 
@@ -21,18 +18,32 @@ const AuthStack = () => (
   </Stack.Navigator>
 );
 
-const InvestorStack = ({ user }) => (
-  <Stack.Navigator>
-    <Stack.Screen name="ProjectsList" component={Profile} initialParams={{ user }} />
-  </Stack.Navigator>
-);
+const InvestorStack = ({ user }) => {
+  console.log('InvestorStack - user data:', user);
+  return (
+    <Stack.Navigator>
+      <Stack.Screen 
+        name="ProjectsList" 
+        component={Profile} 
+        initialParams={{ userData: user }} 
+      />
+    </Stack.Navigator>
+  );
+};
 
-const OwnerStack = ({ user }) => (
-  <Stack.Navigator initialRouteName='OwnerProfile'>
-    <Stack.Screen name="OwnerProfile" component={Profile} initialParams={{ user }} />
-    {/* <Stack.Screen name="InvestorsList" component={InvestorsList} initialParams={{ user }} /> */}
-  </Stack.Navigator>
-);
+const OwnerStack = ({ user }) => {
+  console.log('OwnerStack - user data:', user);
+  return (
+    <Stack.Navigator initialRouteName='OwnerProfile'>
+      <Stack.Screen 
+        name="OwnerProfile" 
+        component={Profile} 
+        initialParams={{ userData: user }} 
+      />
+    </Stack.Navigator>
+  );
+};
+
 const MainRouter = () => {
   const { user, loading } = useAuth();
   const [userData, setUserData] = useState(null);
@@ -42,12 +53,24 @@ const MainRouter = () => {
   useEffect(() => {
     const fetchUserDataAndRole = async () => {
       if (user) {
+        console.log('Fetching user data for ID:', user.id);
+        
         // Fetch only the authenticated user's data
         const { data, error } = await supabase
           .from('users')
           .select('*')
           .eq('id', user.id)
           .single();
+          
+        console.log('Query result - data:', data);
+        console.log('Query result - error:', error);
+        
+        if (error) {
+          console.error('Error fetching user data:', error.message);
+          // If user profile doesn't exist, you might want to redirect to complete profile
+          // or handle this case differently
+        }
+        
         setUserData(data || null);
         setRole(data?.role || null);
       } else {
@@ -60,6 +83,17 @@ const MainRouter = () => {
   }, [user]);
 
   if (loading || roleLoading) return null;
+
+  // If user is authenticated but no profile exists
+  if (user && !userData) {
+    return (
+      <NavigationContainer>
+        <Stack.Navigator screenOptions={{ headerShown: false }}>
+          <Stack.Screen name="Signup" component={SignUpScreen} />
+        </Stack.Navigator>
+      </NavigationContainer>
+    );
+  }
 
   return (
     <NavigationContainer>
