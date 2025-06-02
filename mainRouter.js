@@ -1,41 +1,40 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { AuthContext } from '../context/AuthProvider';
 import supabase from './supabaseClient';
 
-import LoginScreen from '../screens/auth/LoginScreen';
-import SignupScreen from '../screens/auth/SignupScreen';
-import RoleSelection from '../screens/common/RoleSelection';
+import SignUpScreen from './screens/authScreens/SignUp';
+import LoginScreen from './screens/authScreens/Login';
 
-import ProjectsList from '../screens/investor/ProjectsList';
-import OwnerProfile from '../screens/owner/OwnerProfile';
-import InvestorsList from '../screens/owner/InvestorsList';
+// import ProjectsList from '../screens/investor/ProjectsList';
+// import OwnerProfile from '../screens/owner/OwnerProfile';
+// import InvestorsList from '../screens/owner/InvestorsList';
+import Profile from './screens/commonScreens/Profile';
+import { useAuth } from './context/AuthProvider';
 
 const Stack = createNativeStackNavigator();
 
 const AuthStack = () => (
   <Stack.Navigator screenOptions={{ headerShown: false }}>
     <Stack.Screen name="Login" component={LoginScreen} />
-    <Stack.Screen name="Signup" component={SignupScreen} />
-    <Stack.Screen name="RoleSelection" component={RoleSelection} />
+    <Stack.Screen name="Signup" component={SignUpScreen} />
   </Stack.Navigator>
 );
 
-const InvestorStack = ({ users }) => (
+const InvestorStack = ({ user }) => (
   <Stack.Navigator>
-    <Stack.Screen name="ProjectsList" component={ProjectsList} initialParams={{ users }} />
+    <Stack.Screen name="ProjectsList" component={Profile} initialParams={{ user }} />
   </Stack.Navigator>
 );
 
-const OwnerStack = ({ users }) => (
-  <Stack.Navigator>
-    <Stack.Screen name="OwnerProfile" component={OwnerProfile} initialParams={{ users }} />
-    <Stack.Screen name="InvestorsList" component={InvestorsList} initialParams={{ users }} />
+const OwnerStack = ({ user }) => (
+  <Stack.Navigator initialRouteName='OwnerProfile'>
+    <Stack.Screen name="OwnerProfile" component={Profile} initialParams={{ user }} />
+    {/* <Stack.Screen name="InvestorsList" component={InvestorsList} initialParams={{ user }} /> */}
   </Stack.Navigator>
 );
 const MainRouter = () => {
-  const { user, loading } = useContext(AuthContext);
+  const { user, loading } = useAuth();
   const [userData, setUserData] = useState(null);
   const [role, setRole] = useState(null);
   const [roleLoading, setRoleLoading] = useState(true);
@@ -60,17 +59,16 @@ const MainRouter = () => {
     fetchUserDataAndRole();
   }, [user]);
 
-  if (loading || roleLoading) return null; // Or a loading spinner
+  if (loading || roleLoading) return null;
 
-  // Pass userData as a prop to stacks/screens as needed
   return (
     <NavigationContainer>
       {!user ? (
         <AuthStack />
       ) : role === 'owner' ? (
-        <OwnerStack userData={userData} />
+        <OwnerStack user={userData} />
       ) : (
-        <InvestorStack userData={userData} />
+        <InvestorStack user={userData} />
       )}
     </NavigationContainer>
   );
