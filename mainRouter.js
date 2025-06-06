@@ -11,6 +11,7 @@ import { useAuth } from './context/AuthProvider';
 import AddProject from './screens/ownerScreens/AddProject';
 import InvestorsList from './screens/ownerScreens/InvestorsListScreen';
 import CoverLetterScreen from './screens/commonScreens/CoverLetterScreen';
+import ProjectLists from './screens/inverstorScreens/ProjectLists';
 
 const Stack = createNativeStackNavigator();
 
@@ -22,19 +23,31 @@ const AuthStack = () => (
 );
 
 const InvestorStack = ({ user }) => {
+  const navigation = useNavigation();
   return (
     <>
       <Stack.Navigator screenOptions={{ headerShown: false }}>
         <Stack.Screen 
+          name="Profile" 
+          component={ProjectLists} 
+          initialParams={{ userData: user }} 
+        />
+        <Stack.Screen 
+          name="Letter" 
+          component={CoverLetterScreen} 
+          initialParams={{ userData: user }} 
+        />
+        <Stack.Screen
           name="ProjectsList" 
           component={Profile} 
           initialParams={{ userData: user }} 
         />
       </Stack.Navigator>
       <NavBar
-        onProfile={() => {/* navigation logic to profile */}}
-        onInvestors={() => {/* navigation logic to investors */}}
-        onSettings={() => {/* navigation logic to settings */}}
+        middleBtn={"المشاريع"}
+        onProfile={() => {navigation.navigate('ProjectsList')}}
+        onInvestors={() => navigation.navigate('Profile')}
+        onSettings={() => navigation.navigate('Add Project')}
       />
     </>
   );
@@ -67,6 +80,7 @@ const OwnerStack = ({ user }) => {
         />
       </Stack.Navigator>
       <NavBar
+        middleBtn={"المستثمرون"}
         onProfile={() => {navigation.navigate('Profile')}}
         onInvestors={() => navigation.navigate('Inverstors')}
         onSettings={() => navigation.navigate('Add Project')}

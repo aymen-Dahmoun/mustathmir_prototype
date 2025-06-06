@@ -20,6 +20,7 @@ export default function CoverLetterScreen({ route, navigation }) {
   const [message, setMessage] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
   const [loading, setLoading] = useState(false);
+  console.log('receiver: ', investorData);
 
   const handleSend = async () => {
     if (!message.trim()) {

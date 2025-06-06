@@ -1,8 +1,9 @@
 import React from 'react';
 import { View, TouchableOpacity, Text, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { useAuth } from '../context/AuthProvider';
 
-export default function NavBar({ onProfile, onInvestors, onSettings }) {
+export default function NavBar({ onProfile, onInvestors, onSettings, middleBtn }) {
   return (
     <View style={styles.container}>
       <TouchableOpacity style={styles.item} onPress={onProfile}>
@@ -11,7 +12,7 @@ export default function NavBar({ onProfile, onInvestors, onSettings }) {
       </TouchableOpacity>
       <TouchableOpacity style={styles.item} onPress={onInvestors}>
         <Ionicons name="people-outline" size={28} color="#fff" />
-        <Text style={styles.text}>المستثمرون</Text>
+        <Text style={styles.text}>{middleBtn}</Text>
       </TouchableOpacity>
       <TouchableOpacity style={styles.item} onPress={onSettings}>
         <Ionicons name="settings-outline" size={28} color="#fff" />
