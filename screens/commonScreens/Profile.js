@@ -12,6 +12,7 @@ import {
 import { useAuth } from '../../context/AuthProvider';
 import supabase from '../../supabaseClient';
 
+
 export default function Profile({ route }) {
   const { user, loading } = useAuth();
   const userData = route.params?.userData;
@@ -75,7 +76,6 @@ export default function Profile({ route }) {
 
   return (
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
-      {/* Header */}
       <View style={styles.header}>
         <Text style={styles.welcomeText}>مرحباً بعودتك،</Text>
         <Text style={styles.nameTitle}>{userData.full_name}</Text>
@@ -176,7 +176,7 @@ const styles = StyleSheet.create({
   errorMessage: { fontSize: 16, color: '#6C757D', textAlign: 'center' },
   debugText: { fontSize: 12, color: '#ADB5BD', textAlign: 'center', marginTop: 8 },
   header: {
-    backgroundColor: '#F1F3F4',
+    backgroundColor: '#rgb(212, 175, 55)',
     paddingTop: 60,
     paddingBottom: 24,
     alignItems: 'center',
