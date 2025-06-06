@@ -1,15 +1,17 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet } from 'react-native';
 import { AuthProvider } from './context/AuthProvider';
 import MainRouter from './mainRouter';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 
 export default function App() {
   return (
     <SafeAreaProvider>
-      <AuthProvider>
-        <MainRouter />
-      </AuthProvider>
+      <SafeAreaView style={{ flex: 1 }} edges={['top', 'left', 'right', 'bottom']}>
+        <AuthProvider>
+          <MainRouter />
+        </AuthProvider>
+      </SafeAreaView>
     </SafeAreaProvider>
   );
 }

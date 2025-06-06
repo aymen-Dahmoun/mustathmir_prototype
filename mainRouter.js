@@ -1,13 +1,16 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { NavigationContainer } from '@react-navigation/native';
+import { NavigationContainer, useNavigation } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import supabase from './supabaseClient';
-
+import NavBar from './comps/NavBar';
 import SignUpScreen from './screens/authScreens/SignUp';
 import LoginScreen from './screens/authScreens/Login';
 
 import Profile from './screens/commonScreens/Profile';
 import { useAuth } from './context/AuthProvider';
+import AddProject from './screens/ownerScreens/AddProject';
+import InvestorsList from './screens/ownerScreens/InvestorsListScreen';
+import CoverLetterScreen from './screens/commonScreens/CoverLetterScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -19,28 +22,56 @@ const AuthStack = () => (
 );
 
 const InvestorStack = ({ user }) => {
-  console.log('InvestorStack - user data:', user);
   return (
-    <Stack.Navigator>
-      <Stack.Screen 
-        name="ProjectsList" 
-        component={Profile} 
-        initialParams={{ userData: user }} 
+    <>
+      <Stack.Navigator screenOptions={{ headerShown: false }}>
+        <Stack.Screen 
+          name="ProjectsList" 
+          component={Profile} 
+          initialParams={{ userData: user }} 
+        />
+      </Stack.Navigator>
+      <NavBar
+        onProfile={() => {/* navigation logic to profile */}}
+        onInvestors={() => {/* navigation logic to investors */}}
+        onSettings={() => {/* navigation logic to settings */}}
       />
-    </Stack.Navigator>
+    </>
   );
 };
 
 const OwnerStack = ({ user }) => {
-  console.log('OwnerStack - user data:', user);
+  const navigation = useNavigation();
   return (
-    <Stack.Navigator initialRouteName='OwnerProfile'>
-      <Stack.Screen 
-        name="OwnerProfile" 
-        component={Profile} 
-        initialParams={{ userData: user }} 
+    <>
+      <Stack.Navigator initialRouteName='Profile' screenOptions={{ headerShown: false }}>
+        <Stack.Screen 
+          name="Profile" 
+          component={Profile}
+          initialParams={{ userData: user }} 
+        />
+        <Stack.Screen 
+          name="Inverstors"
+          component={InvestorsList}
+          initialParams={{ userData: user }}
+        />
+        <Stack.Screen 
+          name="Add Project" 
+          component={AddProject}
+          initialParams={{ userData: user }} 
+        />
+        <Stack.Screen 
+          name="Letter" 
+          component={CoverLetterScreen}
+          initialParams={{ userData: user }} 
+        />
+      </Stack.Navigator>
+      <NavBar
+        onProfile={() => {navigation.navigate('Profile')}}
+        onInvestors={() => navigation.navigate('Inverstors')}
+        onSettings={() => navigation.navigate('Add Project')}
       />
-    </Stack.Navigator>
+    </>
   );
 };
 
@@ -84,7 +115,6 @@ const MainRouter = () => {
 
   if (loading || roleLoading) return null;
 
-  // If user is authenticated but no profile exists
   if (user && !userData) {
     return (
       <NavigationContainer>
@@ -100,9 +130,9 @@ const MainRouter = () => {
       {!user ? (
         <AuthStack />
       ) : role === 'owner' ? (
-        <OwnerStack user={userData} />
+        <OwnerStack user={userData}/>
       ) : (
-        <InvestorStack user={userData} />
+        <InvestorStack user={userData}/>
       )}
     </NavigationContainer>
   );
