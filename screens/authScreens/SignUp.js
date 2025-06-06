@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import {
-  View, Text, TextInput, Button,
-  StyleSheet, Alert, Image, TouchableOpacity
+  View, Text, TextInput, StyleSheet, Alert, Image, TouchableOpacity, I18nManager, ScrollView
 } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import * as ImagePicker from 'expo-image-picker';
 import supabase from '../../supabaseClient';
+import { Ionicons } from '@expo/vector-icons';
+
 
 export default function SignUpScreen({ navigation }) {
   const [email, setEmail] = useState('');
@@ -33,7 +34,7 @@ export default function SignUpScreen({ navigation }) {
 
   const handleSignUp = async () => {
     if (!fullName || !role || !city || !sector || !email || !password) {
-      Alert.alert('Error', 'Please fill all fields.');
+      Alert.alert('خطأ', 'يرجى ملء جميع الحقول.');
       return;
     }
 
@@ -43,7 +44,7 @@ export default function SignUpScreen({ navigation }) {
 
     if (error) {
       setLoading(false);
-      Alert.alert('Sign Up Failed', error.message);
+      Alert.alert('فشل التسجيل', error.message);
       return;
     }
 
@@ -76,13 +77,13 @@ export default function SignUpScreen({ navigation }) {
           headers: { 'Content-Type': 'multipart/form-data' },
         });
 
-        if (!uploadResponse.ok) throw new Error('Image upload failed');
+        if (!uploadResponse.ok) throw new Error('فشل رفع الصورة');
 
         profilePicturePath = fileName;
 
       } catch (uploadError) {
         setLoading(false);
-        Alert.alert('Image Upload Failed', uploadError.message);
+        Alert.alert('فشل رفع الصورة', uploadError.message);
         return;
       }
     }
@@ -103,106 +104,153 @@ export default function SignUpScreen({ navigation }) {
       setLoading(false);
 
       if (insertError) {
-        console.error('Insert Error:', insertError.message);
-        Alert.alert('Profile Creation Failed', insertError.message);
+        Alert.alert('فشل إنشاء الملف الشخصي', insertError.message);
         return;
       }
 
-      Alert.alert('Success', 'Check your email for confirmation!');
+      Alert.alert('تم التسجيل', 'تحقق من بريدك الإلكتروني لتأكيد الحساب!');
       navigation.navigate('Login');
     } else {
       setLoading(false);
-      Alert.alert('Sign Up Failed', 'No user ID returned.');
+      Alert.alert('فشل التسجيل', 'لم يتم إرجاع معرف المستخدم.');
     }
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Sign Up</Text>
+    <ScrollView contentContainerStyle={styles.scrollContainer}>
+      <View style={styles.container}>
+        <Text style={styles.title}>إنشاء حساب جديد</Text>
 
-      <TouchableOpacity style={styles.pfpContainer} onPress={pickImage}>
-        {profilePicture ? (
-          <Image source={{ uri: profilePicture }} style={styles.pfp} />
-        ) : (
-          <View style={styles.pfpPlaceholder}>
-            <Text style={{ color: '#888' }}>Pick Profile Picture</Text>
-          </View>
-        )}
-      </TouchableOpacity>
+        <TouchableOpacity style={styles.pfpContainer} onPress={pickImage}>
+          {profilePicture ? (
+            <Image source={{ uri: profilePicture }} style={styles.pfp} />
+          ) : (
+            <View style={styles.pfpPlaceholder}>
+              <Ionicons name="camera-outline" size={36} color="#888" />
+            </View>
+          )}
+        </TouchableOpacity>
 
-      <TextInput
-        style={styles.input}
-        placeholder="Full Name"
-        value={fullName}
-        onChangeText={setFullName}
-      />
+        <TextInput
+          style={styles.input}
+          placeholder="الاسم الكامل"
+          value={fullName}
+          onChangeText={setFullName}
+          textAlign={I18nManager.isRTL ? 'right' : 'left'}
+        />
 
-      <Text style={styles.label}>Role</Text>
-      <Picker
-        selectedValue={role}
-        style={styles.input}
-        onValueChange={setRole}
-      >
-        <Picker.Item label="Investor" value="investor" />
-        <Picker.Item label="Owner" value="owner" />
-      </Picker>
+        <Text style={styles.label}>الدور</Text>
+        <View style={styles.pickerWrapper}>
+          <Picker
+            selectedValue={role}
+            style={styles.picker}
+            onValueChange={setRole}
+            itemStyle={{ textAlign: 'right' }}
+          >
+            <Picker.Item label="مستثمر" value="investor" />
+            <Picker.Item label="مالك" value="owner" />
+          </Picker>
+        </View>
 
-      <TextInput
-        style={styles.input}
-        placeholder="City"
-        value={city}
-        onChangeText={setCity}
-      />
+        <TextInput
+          style={styles.input}
+          placeholder="المدينة"
+          value={city}
+          onChangeText={setCity}
+          textAlign={I18nManager.isRTL ? 'right' : 'left'}
+        />
 
-      <TextInput
-        style={styles.input}
-        placeholder="Sector"
-        value={sector}
-        onChangeText={setSector}
-      />
+        <TextInput
+          style={styles.input}
+          placeholder="القطاع"
+          value={sector}
+          onChangeText={setSector}
+          textAlign={I18nManager.isRTL ? 'right' : 'left'}
+        />
 
-      <TextInput
-        style={styles.input}
-        placeholder="Email"
-        autoCapitalize="none"
-        keyboardType="email-address"
-        value={email}
-        onChangeText={setEmail}
-      />
+        <TextInput
+          style={styles.input}
+          placeholder="البريد الإلكتروني"
+          autoCapitalize="none"
+          keyboardType="email-address"
+          value={email}
+          onChangeText={setEmail}
+          textAlign={I18nManager.isRTL ? 'right' : 'left'}
+        />
 
-      <TextInput
-        style={styles.input}
-        placeholder="Password"
-        secureTextEntry
-        value={password}
-        onChangeText={setPassword}
-      />
+        <TextInput
+          style={styles.input}
+          placeholder="كلمة المرور"
+          secureTextEntry
+          value={password}
+          onChangeText={setPassword}
+          textAlign={I18nManager.isRTL ? 'right' : 'left'}
+        />
 
-      <Button
-        title={loading ? 'Signing up...' : 'Sign Up'}
-        onPress={handleSignUp}
-        disabled={loading}
-      />
+        <TouchableOpacity
+          style={[styles.buttonBase, { backgroundColor: '#FFD700', marginTop: 12 }]}
+          onPress={handleSignUp}
+          disabled={loading}
+        >
+          <Text style={styles.buttonText}>{loading ? 'جاري التسجيل...' : 'تسجيل'}</Text>
+        </TouchableOpacity>
 
-      <Text style={styles.link} onPress={() => navigation.navigate('Login')}>
-        Already have an account? Log in
-      </Text>
-    </View>
+        <TouchableOpacity onPress={() => navigation.navigate('Login')}>
+          <Text style={styles.link}>لديك حساب بالفعل؟ سجل الدخول</Text>
+        </TouchableOpacity>
+      </View>
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, justifyContent: 'center', padding: 24 },
-  title: { fontSize: 24, marginBottom: 24, textAlign: 'center' },
-  label: { marginBottom: 4, marginTop: 8 },
+  scrollContainer: { flexGrow: 1, justifyContent: 'center', backgroundColor: '#fff' },
+  container: { flex: 1, justifyContent: 'center', padding: 24, backgroundColor: '#fff' },
+  title: { fontSize: 28, fontWeight: 'bold', color: '#1A1A1A', marginBottom: 32, textAlign: 'center' },
+  label: { marginBottom: 4, marginTop: 8, fontSize: 16, color: '#6C757D', textAlign: 'right', fontWeight: '600' },
   input: {
     borderWidth: 1,
-    borderColor: '#ccc',
-    borderRadius: 6,
-    padding: 12,
-    marginBottom: 16,
+    borderColor: '#F1F3F4',
+    borderRadius: 8,
+    padding: 14,
+    marginBottom: 18,
+    fontSize: 16,
+    backgroundColor: '#F8F9FA',
+    textAlign: 'right',
   },
-  link: { color: 'blue', marginTop: 16, textAlign: 'center' },
+  pickerWrapper: {
+    borderWidth: 1,
+    borderColor: '#F1F3F4',
+    borderRadius: 8,
+    marginBottom: 18,
+    backgroundColor: '#F8F9FA',
+    overflow: 'hidden',
+  },
+  picker: {
+    width: '100%',
+    height: 48,
+    color: '#1A1A1A',
+    textAlign: 'right',
+    backgroundColor: '#F8F9FA',
+  },
+  buttonBase: {
+    paddingVertical: 14,
+    borderRadius: 8,
+    alignItems: 'center',
+    elevation: 2,
+  },
+  buttonText: {
+    color: '#1A1A1A',
+    fontWeight: 'bold',
+    fontSize: 18,
+  },
+  link: {
+    color: '#007BFF',
+    marginTop: 24,
+    textAlign: 'center',
+    fontSize: 16,
+    fontWeight: '600',
+  },
   pfpContainer: { alignSelf: 'center', marginBottom: 16 },
   pfp: { width: 80, height: 80, borderRadius: 40 },
   pfpPlaceholder: {

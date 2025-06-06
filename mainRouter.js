@@ -12,6 +12,8 @@ import AddProject from './screens/ownerScreens/AddProject';
 import InvestorsList from './screens/ownerScreens/InvestorsListScreen';
 import CoverLetterScreen from './screens/commonScreens/CoverLetterScreen';
 import ProjectLists from './screens/inverstorScreens/ProjectLists';
+import Notifications from './screens/commonScreens/Notifications';
+import { KeyboardAvoidingView, Platform } from 'react-native';
 
 const Stack = createNativeStackNavigator();
 
@@ -42,12 +44,19 @@ const InvestorStack = ({ user }) => {
           component={Profile} 
           initialParams={{ userData: user }} 
         />
+        <Stack.Screen 
+          name="Notification" 
+          component={Notifications}
+          initialParams={{ userData: user }} 
+        />
       </Stack.Navigator>
+      
       <NavBar
         middleBtn={"المشاريع"}
         onProfile={() => {navigation.navigate('ProjectsList')}}
         onInvestors={() => navigation.navigate('Profile')}
         onSettings={() => navigation.navigate('Add Project')}
+        onNotifications={() => navigation.navigate('Notification')}
       />
     </>
   );
@@ -78,12 +87,18 @@ const OwnerStack = ({ user }) => {
           component={CoverLetterScreen}
           initialParams={{ userData: user }} 
         />
+        <Stack.Screen 
+          name="Notification" 
+          component={Notifications}
+          initialParams={{ userData: user }} 
+        />
       </Stack.Navigator>
       <NavBar
         middleBtn={"المستثمرون"}
         onProfile={() => {navigation.navigate('Profile')}}
         onInvestors={() => navigation.navigate('Inverstors')}
         onSettings={() => navigation.navigate('Add Project')}
+        onNotifications={() => navigation.navigate('Notification')}
       />
     </>
   );
@@ -140,6 +155,10 @@ const MainRouter = () => {
   }
 
   return (
+            <KeyboardAvoidingView
+              behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+              style={{flex:1}} >
+    
     <NavigationContainer>
       {!user ? (
         <AuthStack />
@@ -149,6 +168,7 @@ const MainRouter = () => {
         <InvestorStack user={userData}/>
       )}
     </NavigationContainer>
+            </KeyboardAvoidingView>
   );
 };
 

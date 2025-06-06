@@ -39,6 +39,7 @@ export default function CoverLetterScreen({ route, navigation }) {
     setLoading(false);
     if (error) {
       Alert.alert('خطأ', 'حدث خطأ أثناء إرسال الرسالة. حاول مرة أخرى.');
+      console.log('error: ', error)
     } else {
       Alert.alert('تم الإرسال', 'تم إرسال رسالتك بنجاح.');
       navigation.goBack();
