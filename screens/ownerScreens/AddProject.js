@@ -14,18 +14,20 @@ import * as ImagePicker from 'expo-image-picker';
 import * as DocumentPicker from 'expo-document-picker';
 import supabase from '../../supabaseClient';
 import { useAuth } from '../../context/AuthProvider';
+import { useNavigation } from '@react-navigation/native';
 
 // Enable RTL layout for Arabic
 I18nManager.allowRTL(true);
 I18nManager.forceRTL(true);
 
-export default function AddProject({ navigation }) {
+export default function AddProject() {
   const { user } = useAuth();
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [projectPicture, setProjectPicture] = useState(null);
   const [projectDoc, setProjectDoc] = useState(null);
   const [loading, setLoading] = useState(false);
+  const navigation = useNavigation();
 
   const pickImage = async () => {
     try {

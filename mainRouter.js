@@ -13,7 +13,10 @@ import InvestorsList from './screens/ownerScreens/InvestorsListScreen';
 import CoverLetterScreen from './screens/commonScreens/CoverLetterScreen';
 import ProjectLists from './screens/inverstorScreens/ProjectLists';
 import Notifications from './screens/commonScreens/Notifications';
+import Policies from './screens/commonScreens/Policies';
+
 import { KeyboardAvoidingView, Platform } from 'react-native';
+import Settings from './screens/commonScreens/Settings';
 
 const Stack = createNativeStackNavigator();
 
@@ -49,13 +52,23 @@ const InvestorStack = ({ user }) => {
           component={Notifications}
           initialParams={{ userData: user }} 
         />
+        <Stack.Screen 
+          name="Policies" 
+          component={Policies}
+          initialParams={{ userData: user }} 
+        />
+        <Stack.Screen 
+          name="Settings" 
+          component={Settings}
+          initialParams={{ userData: user }} 
+        />
       </Stack.Navigator>
       
       <NavBar
         middleBtn={"المشاريع"}
         onProfile={() => {navigation.navigate('ProjectsList')}}
         onInvestors={() => navigation.navigate('Profile')}
-        onSettings={() => navigation.navigate('Add Project')}
+        onSettings={() => navigation.navigate('Settings')}
         onNotifications={() => navigation.navigate('Notification')}
       />
     </>
@@ -92,12 +105,22 @@ const OwnerStack = ({ user }) => {
           component={Notifications}
           initialParams={{ userData: user }} 
         />
+        <Stack.Screen 
+          name="Policies" 
+          component={Policies}
+          initialParams={{ userData: user }} 
+        />
+        <Stack.Screen 
+          name="Settings" 
+          component={Settings}
+          initialParams={{ userData: user }} 
+        />
       </Stack.Navigator>
       <NavBar
         middleBtn={"المستثمرون"}
         onProfile={() => {navigation.navigate('Profile')}}
         onInvestors={() => navigation.navigate('Inverstors')}
-        onSettings={() => navigation.navigate('Add Project')}
+        onSettings={() => navigation.navigate('Settings')}
         onNotifications={() => navigation.navigate('Notification')}
       />
     </>

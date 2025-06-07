@@ -3,20 +3,24 @@ import {
   View,
   Text,
   StyleSheet,
-  TouchableOpacity,
-  Alert,
   Image,
   ScrollView,
   I18nManager,
+  FlatList,
+  TouchableOpacity,
+  Linking,
 } from 'react-native';
 import { useAuth } from '../../context/AuthProvider';
 import supabase from '../../supabaseClient';
-
+import { useNavigation } from '@react-navigation/native';
 
 export default function Profile({ route }) {
   const { user, loading } = useAuth();
   const userData = route.params?.userData;
   const [profilePicUrl, setProfilePicUrl] = useState(null);
+  const [myProjects, setMyProjects] = useState([]);
+  const [projectsLoading, setProjectsLoading] = useState(false);
+  const navigation = useNavigation();
 
   useEffect(() => {
     async function fetchPic() {
@@ -30,9 +34,26 @@ export default function Profile({ route }) {
     fetchPic();
   }, [userData?.profile_picture]);
 
-  const handleLogout = async () => {
-    const { error } = await supabase.auth.signOut();
-    if (error) Alert.alert('فشل تسجيل الخروج', error.message);
+  useEffect(() => {
+    const fetchProjects = async () => {
+      if (userData?.role === 'owner') {
+        setProjectsLoading(true);
+        const { data, error } = await supabase
+          .from('projects')
+          .select('*')
+          .eq('owner_id', user.id)
+          .order('created_at', { ascending: false });
+        setMyProjects(data || []);
+        setProjectsLoading(false);
+      }
+    };
+    fetchProjects();
+  }, [userData?.role, user?.id]);
+
+  const getPublicUrl = (bucket, fileName) => {
+    if (!fileName) return null;
+    const { data } = supabase.storage.from(bucket).getPublicUrl(fileName);
+    return data?.publicUrl || null;
   };
 
   if (loading) {
@@ -48,12 +69,6 @@ export default function Profile({ route }) {
       <View style={styles.centered}>
         <Text style={styles.errorTitle}>تم رفض الوصول</Text>
         <Text style={styles.errorMessage}>يجب تسجيل الدخول لعرض الملف الشخصي.</Text>
-        <TouchableOpacity
-          style={[styles.buttonBase, { backgroundColor: '#DC3545', marginTop: 16 }]}
-          onPress={handleLogout}
-        >
-          <Text style={styles.buttonText}>تسجيل الخروج</Text>
-        </TouchableOpacity>
       </View>
     );
   }
@@ -64,12 +79,6 @@ export default function Profile({ route }) {
         <Text style={styles.errorTitle}>الملف غير متوفر</Text>
         <Text style={styles.errorMessage}>تعذر تحميل بيانات الملف الشخصي.</Text>
         <Text style={styles.debugText}>{JSON.stringify(route.params)}</Text>
-        <TouchableOpacity
-          style={[styles.buttonBase, { backgroundColor: '#DC3545', marginTop: 16 }]}
-          onPress={handleLogout}
-        >
-          <Text style={styles.buttonText}>تسجيل الخروج</Text>
-        </TouchableOpacity>
       </View>
     );
   }
@@ -147,28 +156,148 @@ export default function Profile({ route }) {
           </View>
         </View>
 
-        {/* Buttons */}
-        <View style={styles.actions}>
-          <TouchableOpacity style={[styles.buttonBase, { backgroundColor: '#007BFF', flex: 1, marginRight: 8 }]}>
-            <Text style={styles.buttonText}>تعديل الملف</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={[styles.buttonBase, { backgroundColor: '#6C757D', flex: 1, marginLeft: 8 }]}>
-            <Text style={styles.buttonText}>الإعدادات</Text>
-          </TouchableOpacity>
-        </View>
-
-        <TouchableOpacity
-          style={[styles.buttonBase, { backgroundColor: '#DC3545', marginTop: 16 }]}
-          onPress={handleLogout}
-        >
-          <Text style={styles.buttonText}>تسجيل الخروج</Text>
-        </TouchableOpacity>
+        {userData.role === 'owner' && (
+          <View style={styles.card}>
+            <View style={{ flexDirection: I18nManager.isRTL ? 'row-reverse' : 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12 }}>
+              <Text style={styles.cardTitle}>مشاريعي</Text>
+              <TouchableOpacity
+                style={styles.addProjectButton}
+                onPress={() => navigation.navigate('Add Project')}
+              >
+                <Text style={styles.addProjectButtonText}>+ إضافة مشروع</Text>
+              </TouchableOpacity>
+            </View>
+            {projectsLoading ? (
+              <Text style={styles.loadingText}>جاري تحميل المشاريع...</Text>
+            ) : myProjects.length === 0 ? (
+              <Text style={styles.emptyText}>لا توجد مشاريع بعد.</Text>
+            ) : (
+              <FlatList
+                data={myProjects}
+                keyExtractor={item => item.id}
+                renderItem={({ item }) => {
+                  const pictureUrl = getPublicUrl('picture', item.picture);
+                  const documentUrl = getPublicUrl('document', item.document);
+                  return (
+                    <View style={styles.projectItem}>
+                      <TouchableOpacity
+                        activeOpacity={0.8}
+                        onPress={() => {
+                          if (pictureUrl) Linking.openURL(pictureUrl);
+                        }}
+                      >
+                        {pictureUrl ? (
+                          <Image source={{ uri: pictureUrl }} style={styles.projectImage} />
+                        ) : (
+                          <View style={styles.projectImagePlaceholder}>
+                            <Text style={styles.placeholderText}>لا توجد صورة</Text>
+                          </View>
+                        )}
+                      </TouchableOpacity>
+                      <View style={{ flex: 1 }}>
+                        <Text style={styles.projectTitle}>{item.title}</Text>
+                        <Text style={styles.projectDesc}>{item.description}</Text>
+                        {documentUrl && (
+                          <TouchableOpacity
+                            style={styles.docButton}
+                            onPress={() => Linking.openURL(documentUrl)}
+                          >
+                            <Text style={styles.docButtonText}>عرض المستند</Text>
+                          </TouchableOpacity>
+                        )}
+                      </View>
+                    </View>
+                  );
+                }}
+                scrollEnabled={false}
+                contentContainerStyle={{ paddingBottom: 8 }}
+              />
+            )}
+          </View>
+        )}
       </View>
     </ScrollView>
   );
 }
 
+// ...styles remain unchanged, but add these at the end:
 const styles = StyleSheet.create({
+  // ...existing styles...
+  projectItem: {
+    flexDirection: I18nManager.isRTL ? 'row-reverse' : 'row',
+    alignItems: 'center',
+    marginBottom: 16,
+    gap: 12,
+  },
+  projectImage: {
+    width: 64,
+    height: 64,
+    borderRadius: 8,
+    backgroundColor: '#eee',
+    marginLeft: I18nManager.isRTL ? 0 : 12,
+    marginRight: I18nManager.isRTL ? 12 : 0,
+  },
+  addProjectButton: {
+    backgroundColor: '#FFD700',
+    paddingVertical: 6,
+    paddingHorizontal: 14,
+    borderRadius: 8,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginLeft: I18nManager.isRTL ? 0 : 8,
+    marginRight: I18nManager.isRTL ? 8 : 0,
+  },
+  addProjectButtonText: {
+    color: '#1A1A1A',
+    fontWeight: 'bold',
+    fontSize: 15,
+  },
+  projectImagePlaceholder: {
+    width: 64,
+    height: 64,
+    borderRadius: 8,
+    backgroundColor: '#eee',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginLeft: I18nManager.isRTL ? 0 : 12,
+    marginRight: I18nManager.isRTL ? 12 : 0,
+  },
+  placeholderText: {
+    color: '#aaa',
+    fontSize: 12,
+  },
+  projectTitle: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#1A1A1A',
+    textAlign: 'right',
+    marginBottom: 2,
+  },
+  projectDesc: {
+    fontSize: 14,
+    color: '#6C757D',
+    textAlign: 'right',
+    marginBottom: 4,
+  },
+  docButton: {
+    backgroundColor: '#FFD700',
+    paddingVertical: 4,
+    paddingHorizontal: 10,
+    borderRadius: 6,
+    alignSelf: 'flex-start',
+    marginTop: 4,
+  },
+  docButtonText: {
+    color: '#1A1A1A',
+    fontWeight: 'bold',
+    fontSize: 13,
+  },
+  emptyText: {
+    textAlign: 'center',
+    color: '#888',
+    marginTop: 8,
+    fontSize: 15,
+  },
   container: { flex: 1, backgroundColor: '#fff' },
   centered: { flex: 1, justifyContent: 'center', alignItems: 'center', padding: 24 },
   loadingText: { fontSize: 18, color: '#6C757D', fontWeight: '500' },
