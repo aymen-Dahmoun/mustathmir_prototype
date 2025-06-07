@@ -51,7 +51,6 @@ export default function CoverLetterScreen({ route, navigation }) {
       <View style={styles.header}>
         <Text style={styles.title}>إرسال رسالة تعريفية</Text>
       </View>
-      {/* Investor Info Section */}
       {investorData && (
         <View style={styles.investorCard}>
           <View style={styles.investorRow}>

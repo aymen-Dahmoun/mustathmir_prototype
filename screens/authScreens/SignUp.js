@@ -6,6 +6,7 @@ import { Picker } from '@react-native-picker/picker';
 import * as ImagePicker from 'expo-image-picker';
 import supabase from '../../supabaseClient';
 import { Ionicons } from '@expo/vector-icons';
+import { investmentSectors, Wilayas } from '../../constants/constants';
 
 
 export default function SignUpScreen({ navigation }) {
@@ -148,25 +149,40 @@ export default function SignUpScreen({ navigation }) {
             itemStyle={{ textAlign: 'right' }}
           >
             <Picker.Item label="مستثمر" value="investor" />
-            <Picker.Item label="مالك" value="owner" />
+            <Picker.Item label="صاحب مشروع" value="owner" />
+          </Picker>
+        </View>
+ 
+          <Text style={styles.label}>المدينة</Text>
+        <View style={styles.pickerWrapper}>
+        <Picker
+            selectedValue={role}
+            style={styles.picker}
+            onValueChange={setCity}
+            itemStyle={{ textAlign: 'right' }}
+          >
+          {Wilayas.map((wilaya, index) => (
+            <Picker.Item key={index} label={wilaya} value={wilaya} />
+          ))}
           </Picker>
         </View>
 
-        <TextInput
-          style={styles.input}
-          placeholder="المدينة"
-          value={city}
-          onChangeText={setCity}
-          textAlign={I18nManager.isRTL ? 'right' : 'left'}
-        />
-
-        <TextInput
-          style={styles.input}
-          placeholder="القطاع"
-          value={sector}
-          onChangeText={setSector}
-          textAlign={I18nManager.isRTL ? 'right' : 'left'}
-        />
+        <Text style={styles.label}>القطاع الاستثماري</Text>
+        <View style={styles.pickerWrapper}>
+          <Picker
+            selectedValue={role}
+            style={styles.picker}
+            onValueChange={setSector}
+            itemStyle={{ textAlign: 'left'  }}
+          >
+            {
+              investmentSectors.map((sector, index) => (
+                <Picker.Item key={index} label={sector} value={sector} />
+              ))
+            }
+          
+          </Picker>
+        </View>
 
         <TextInput
           style={styles.input}
@@ -220,18 +236,20 @@ const styles = StyleSheet.create({
   },
   pickerWrapper: {
     borderWidth: 1,
-    borderColor: '#F1F3F4',
+    borderColor: '#000000',
     borderRadius: 8,
     marginBottom: 18,
     backgroundColor: '#F8F9FA',
     overflow: 'hidden',
+    marginTop: 8,
   },
   picker: {
     width: '100%',
-    height: 48,
+    height: 52,
     color: '#1A1A1A',
     textAlign: 'right',
     backgroundColor: '#F8F9FA',
+    margin: 4,
   },
   buttonBase: {
     paddingVertical: 14,
