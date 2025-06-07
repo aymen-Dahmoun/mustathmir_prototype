@@ -81,7 +81,7 @@ export default function ProjectLists() {
               }}
             >
               {pictureUrl ? (
-                <Image source={{ uri: pictureUrl }} style={styles.projectImage} />
+                <Image source={{ uri: pictureUrl  }} style={styles.projectImage} />
               ) : (
                 <View style={styles.imagePlaceholder}>
                   <Text style={styles.placeholderText}>لا توجد صورة</Text>

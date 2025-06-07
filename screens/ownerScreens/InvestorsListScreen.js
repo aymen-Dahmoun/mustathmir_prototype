@@ -119,7 +119,7 @@ export default function InvestorsList({ navigation }) {
       {/* Avatar Section (moved to right for RTL) */}
       <View style={styles.avatarSection}>
         {investor.profilePicUrl ? (
-          <Image source={{ uri: investor.profilePicUrl }} style={styles.avatar} />
+          <Image source={{ uri: investor.profilePicUrl || '/assets/profile.png'}} style={styles.avatar} />
         ) : (
           <View style={styles.avatarPlaceholder}>
             <Text style={styles.avatarInitials}>
