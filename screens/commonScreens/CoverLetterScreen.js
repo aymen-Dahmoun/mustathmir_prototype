@@ -23,8 +23,8 @@ export default function CoverLetterScreen({ route, navigation }) {
   console.log('receiver: ', investorData);
 
   const handleSend = async () => {
-    if (!message.trim()) {
-      Alert.alert('خطأ', 'يرجى كتابة رسالة قبل الإرسال.');
+    if (!message.trim() || phoneNumber.length === 0) {
+      Alert.alert('خطأ', 'يرجى كتابة رسالة و وضع رقم هاتف صحيح قبل الإرسال.');
       return;
     }
     setLoading(true);

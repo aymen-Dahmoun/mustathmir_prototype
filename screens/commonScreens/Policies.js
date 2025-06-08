@@ -12,15 +12,6 @@ const Policies = () => {
   useEffect(() => {
     if (!I18nManager.isRTL) {
       I18nManager.forceRTL(true);
-      if (Platform.OS === 'android') {
-        // Only import RNRestart if needed and available
-        try {
-          const RNRestart = require('react-native-restart').default;
-          RNRestart.Restart();
-        } catch (e) {
-          // RNRestart not available, ignore
-        }
-      }
     }
   }, []);
 

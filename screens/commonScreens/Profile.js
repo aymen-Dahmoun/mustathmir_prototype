@@ -42,13 +42,14 @@ export default function Profile({ route }) {
           .from('projects')
           .select('*')
           .eq('owner_id', user.id)
-          .order('created_at', { ascending: false });
         setMyProjects(data || []);
         setProjectsLoading(false);
       }
     };
     fetchProjects();
   }, [userData?.role, user?.id]);
+
+
 
   const getPublicUrl = (bucket, fileName) => {
     if (!fileName) return null;
@@ -220,9 +221,7 @@ export default function Profile({ route }) {
   );
 }
 
-// ...styles remain unchanged, but add these at the end:
 const styles = StyleSheet.create({
-  // ...existing styles...
   projectItem: {
     flexDirection: I18nManager.isRTL ? 'row-reverse' : 'row',
     alignItems: 'center',
@@ -316,9 +315,6 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(212,175,55,0.1)',
     paddingHorizontal: 16,
     paddingVertical: 4,
-    borderRadius: 20,
-    borderWidth: 1,
-    borderColor: '#D4AF37',
     marginTop: 8,
     marginBottom: 20,
   },

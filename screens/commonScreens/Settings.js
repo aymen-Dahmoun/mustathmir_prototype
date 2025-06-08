@@ -10,9 +10,9 @@ import {
   Platform,
   ScrollView,
 } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
 import { useAuth } from '../../context/AuthProvider';
 import supabase from '../../supabaseClient';
+import { useNavigation } from '@react-navigation/native';
 
 export default function Settings() {
   const navigation = useNavigation();
@@ -51,15 +51,6 @@ export default function Settings() {
         }}
       >
         <Text style={styles.itemText}>تواصل مع الدعم الفني</Text>
-      </TouchableOpacity>
-
-      <TouchableOpacity
-        style={styles.item}
-        onPress={() => {
-          Linking.openURL('https://successpartners.com/faq');
-        }}
-      >
-        <Text style={styles.itemText}>الأسئلة الشائعة</Text>
       </TouchableOpacity>
 
       <TouchableOpacity

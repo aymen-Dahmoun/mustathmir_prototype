@@ -219,12 +219,12 @@ export default function SignUpScreen({ navigation }) {
             {policyAccepted && <Ionicons name="checkmark" size={20} color="#FFD700" />}
           </TouchableOpacity>
           <View style={styles.policyTextContainer}>
-            <Text style={styles.policyText}>
-              أوافق على 
-            </Text>
             <TouchableOpacity onPress={() => setShowPolicyModal(true)}>
               <Text style={styles.policyLink}>سياسة الخصوصية</Text>
             </TouchableOpacity>
+            <Text style={styles.policyText}>
+              أوافق على 
+            </Text>
           </View>
         </View>
 
@@ -264,7 +264,8 @@ export default function SignUpScreen({ navigation }) {
                 <Ionicons name="close" size={24} color="#333" />
               </TouchableOpacity>
               <Text style={styles.modalTitle}>سياسة البيانات والخصوصية</Text>
-            </View>            <View style={styles.modalContent}>
+            </View>          
+            <View style={styles.modalContent}>
               <Text style={styles.policyTitle}>سياسة البيانات والخصوصية لتطبيق "شركاء النجاح"</Text>
 
               <Text style={styles.policyParagraph}>
@@ -430,12 +431,12 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
   },
   policyText: {
-    fontSize: 14,
+    fontSize: 18,
     color: '#666',
     textAlign: 'right',
   },
   policyLink: {
-    fontSize: 14,
+    fontSize: 18,
     color: '#007BFF',
     textDecorationLine: 'underline',
     marginRight: 4,
