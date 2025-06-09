@@ -47,7 +47,7 @@ export default function Settings() {
       <TouchableOpacity
         style={styles.item}
         onPress={() => {
-          Linking.openURL('nananaouela@gmail.com');
+          Linking.openURL('mailto:nananaouela@gmail.com');
         }}
       >
         <Text style={styles.itemText}>تواصل مع الدعم الفني</Text>
