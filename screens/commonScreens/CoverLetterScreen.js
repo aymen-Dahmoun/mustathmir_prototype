@@ -20,7 +20,6 @@ export default function CoverLetterScreen({ route, navigation }) {
   const [message, setMessage] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
   const [loading, setLoading] = useState(false);
-  console.log('receiver: ', investorData);
 
   const handleSend = async () => {
     if (!message.trim() || phoneNumber.length === 0) {
@@ -39,7 +38,6 @@ export default function CoverLetterScreen({ route, navigation }) {
     setLoading(false);
     if (error) {
       Alert.alert('خطأ', 'حدث خطأ أثناء إرسال الرسالة. حاول مرة أخرى.');
-      console.log('error: ', error)
     } else {
       Alert.alert('تم الإرسال', 'تم إرسال رسالتك بنجاح.');
       navigation.goBack();
@@ -205,13 +203,13 @@ const styles = StyleSheet.create({
     backgroundColor: '#F8F9FA',
   },
   actions: {
-    flexDirection: I18nManager.isRTL ? 'row-reverse' : 'row',
-    marginTop: 12,
+    flexDirection: 'column',
   },
   buttonBase: {
-    paddingVertical: 12,
+    padding: 12,
     borderRadius: 8,
     alignItems: 'center',
+    margin: 8,
   },
   buttonText: {
     color: '#fff',

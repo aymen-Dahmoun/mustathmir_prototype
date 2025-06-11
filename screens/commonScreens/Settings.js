@@ -47,7 +47,7 @@ export default function Settings() {
       <TouchableOpacity
         style={styles.item}
         onPress={() => {
-          Linking.openURL('mailto:support@successpartners.com');
+          Linking.openURL('mailto:nananaouela@gmail.com');
         }}
       >
         <Text style={styles.itemText}>تواصل مع الدعم الفني</Text>
@@ -81,13 +81,15 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     flexGrow: 1,
     alignItems: 'stretch',
+    direction: 'rtl',
   },
   header: {
     fontSize: 28,
     fontWeight: 'bold',
     color: '#1A1A1A',
-    textAlign: 'center',
+    textAlign: 'right',
     marginBottom: 32,
+    writingDirection: 'rtl',
   },
   item: {
     backgroundColor: '#fffbe6',
@@ -98,10 +100,14 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#ffe066',
     elevation: 1,
+    flexDirection: 'row-reverse',
+    justifyContent: 'flex-end',
   },
   itemText: {
     fontSize: 18,
     color: '#1A1A1A',
     textAlign: 'right',
+    writingDirection: 'rtl',
+    flex: 1,
   },
 });

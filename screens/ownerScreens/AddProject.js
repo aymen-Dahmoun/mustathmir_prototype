@@ -49,7 +49,6 @@ export default function AddProject() {
         setProjectPicture(result.assets[0].uri);
       }
     } catch (error) {
-      console.log('Image picker error:', error);
       Alert.alert('خطأ', 'فشل في اختيار الصورة. يرجى المحاولة مرة أخرى.');
     }
   };
@@ -71,7 +70,6 @@ export default function AddProject() {
         });
       }
     } catch (error) {
-      console.log('Document picker error:', error);
       Alert.alert('خطأ', 'فشل في اختيار المستند. يرجى المحاولة مرة أخرى.');
     }
   };
@@ -173,7 +171,6 @@ export default function AddProject() {
       ]);
 
     } catch (error) {
-      console.log('Upload error:', error);
       Alert.alert('خطأ', error.message);
     } finally {
       setLoading(false);

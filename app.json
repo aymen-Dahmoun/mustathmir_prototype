@@ -3,9 +3,13 @@
     "name": "Success Partners",
     "slug": "Success-Partners",
     "version": "1.0.0",
+    "owner": "mouaine_dah",
     "orientation": "portrait",
-    "icon": "./assets/icon.jpg",
+    "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
+    "platforms": [
+      "android"
+    ],
     "newArchEnabled": true,
     "splash": {
       "image": "./assets/splash-icon.png",
@@ -24,6 +28,13 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "SUPABASE_URL": "https://dxuyvokigytpttyeulqt.supabase.co",
+      "SUPABASE_ANON_KEY": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR4dXl2b2tpZ3l0cHR0eWV1bHF0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDg4NjQ2NDMsImV4cCI6MjA2NDQ0MDY0M30.qUI9BYBhsm1vB6A8o_aUf4-Gx85hOfPqcpqEfurl7Fw",
+      "eas": {
+        "projectId": "4ffa7325-3a80-445f-9286-98dc34be65bd"
+      }
     }
   }
 }

@@ -223,7 +223,7 @@ export default function Profile({ route }) {
 
 const styles = StyleSheet.create({
   projectItem: {
-    flexDirection: I18nManager.isRTL ? 'row-reverse' : 'row',
+    flexDirection: 'row-reverse', // Force RTL for project items
     alignItems: 'center',
     marginBottom: 16,
     gap: 12,
@@ -233,8 +233,8 @@ const styles = StyleSheet.create({
     height: 64,
     borderRadius: 8,
     backgroundColor: '#eee',
-    marginLeft: I18nManager.isRTL ? 0 : 12,
-    marginRight: I18nManager.isRTL ? 12 : 0,
+    marginLeft: 0,
+    marginRight: 12,
   },
   addProjectButton: {
     backgroundColor: '#FFD700',
@@ -243,13 +243,16 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     alignItems: 'center',
     justifyContent: 'center',
-    marginLeft: I18nManager.isRTL ? 0 : 8,
-    marginRight: I18nManager.isRTL ? 8 : 0,
+    marginLeft: 0,
+    marginRight: 8,
+    flexDirection: 'row-reverse',
   },
   addProjectButtonText: {
     color: '#1A1A1A',
     fontWeight: 'bold',
     fontSize: 15,
+    textAlign: 'right',
+    writingDirection: 'rtl',
   },
   projectImagePlaceholder: {
     width: 64,
@@ -258,12 +261,14 @@ const styles = StyleSheet.create({
     backgroundColor: '#eee',
     alignItems: 'center',
     justifyContent: 'center',
-    marginLeft: I18nManager.isRTL ? 0 : 12,
-    marginRight: I18nManager.isRTL ? 12 : 0,
+    marginLeft: 0,
+    marginRight: 12,
   },
   placeholderText: {
     color: '#aaa',
     fontSize: 12,
+    textAlign: 'right',
+    writingDirection: 'rtl',
   },
   projectTitle: {
     fontSize: 16,
@@ -271,31 +276,37 @@ const styles = StyleSheet.create({
     color: '#1A1A1A',
     textAlign: 'right',
     marginBottom: 2,
+    writingDirection: 'rtl',
   },
   projectDesc: {
     fontSize: 14,
     color: '#6C757D',
     textAlign: 'right',
     marginBottom: 4,
+    writingDirection: 'rtl',
   },
   docButton: {
     backgroundColor: '#FFD700',
     paddingVertical: 4,
     paddingHorizontal: 10,
     borderRadius: 6,
-    alignSelf: 'flex-start',
+    alignSelf: 'flex-end', // RTL: align to right
     marginTop: 4,
+    flexDirection: 'row-reverse',
   },
   docButtonText: {
     color: '#1A1A1A',
     fontWeight: 'bold',
     fontSize: 13,
+    textAlign: 'right',
+    writingDirection: 'rtl',
   },
   emptyText: {
     textAlign: 'center',
     color: '#888',
     marginTop: 8,
     fontSize: 15,
+    writingDirection: 'rtl',
   },
   container: { flex: 1, backgroundColor: '#fff' },
   centered: { flex: 1, justifyContent: 'center', alignItems: 'center', padding: 24 },

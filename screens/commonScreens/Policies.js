@@ -4,14 +4,16 @@ import {
   Text,
   StyleSheet,
   I18nManager,
-  Platform
+  Platform,
+  View,
 } from 'react-native';
 
-// Remove useEffect from the top-level and place it inside the component
 const Policies = () => {
   useEffect(() => {
     if (!I18nManager.isRTL) {
+      I18nManager.allowRTL(true);
       I18nManager.forceRTL(true);
+
     }
   }, []);
 
@@ -88,6 +90,7 @@ const styles = StyleSheet.create({
     padding: 20,
     alignItems: 'flex-end',
     backgroundColor: '#fff',
+    direction: Platform.OS === 'ios' ? 'rtl' : undefined, // iOS-specific
   },
   header: {
     fontSize: 20,
@@ -95,6 +98,7 @@ const styles = StyleSheet.create({
     marginBottom: 12,
     textAlign: 'right',
     color: '#333',
+    writingDirection: 'rtl',
   },
   sectionTitle: {
     fontSize: 18,
@@ -103,12 +107,14 @@ const styles = StyleSheet.create({
     marginBottom: 8,
     textAlign: 'right',
     color: '#444',
+    writingDirection: 'rtl',
   },
   paragraph: {
     fontSize: 16,
     lineHeight: 28,
     textAlign: 'right',
     color: '#555',
+    writingDirection: 'rtl',
   },
 });
 

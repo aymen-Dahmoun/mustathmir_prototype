@@ -1,9 +1,12 @@
-import 'dotenv/config';
 
 export default ({ config }) => ({
   ...config,
   extra: {
-    SUPABASE_URL: process.env.SUPABASE_URL,
-    SUPABASE_ANON_KEY: process.env.SUPABASE_ANON_KEY,
+    eas: {
+      projectId: "4ffa7325-3a80-445f-9286-98dc34be65bd",
+    },
+  },
+  android: {
+    package: "com.mouhmouaine.successpartners",
   },
 });

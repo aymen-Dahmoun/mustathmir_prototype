@@ -136,7 +136,6 @@ const MainRouter = () => {
   useEffect(() => {
     const fetchUserDataAndRole = async () => {
       if (user) {
-        console.log('Fetching user data for ID:', user.id);
         
         // Fetch only the authenticated user's data
         const { data, error } = await supabase
@@ -144,16 +143,7 @@ const MainRouter = () => {
           .select('*')
           .eq('id', user.id)
           .single();
-          
-        console.log('Query result - data:', data);
-        console.log('Query result - error:', error);
-        
-        if (error) {
-          console.error('Error fetching user data:', error.message);
-          // If user profile doesn't exist, you might want to redirect to complete profile
-          // or handle this case differently
-        }
-        
+
         setUserData(data || null);
         setRole(data?.role || null);
       } else {

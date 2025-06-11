@@ -51,7 +51,6 @@ export default function InvestorsList({ navigation }) {
 
       setInvestors(investorsWithPics);
     } catch (error) {
-      console.error('Error fetching investors:', error);
       Alert.alert('خطأ', 'فشل في تحميل المستثمرين. يرجى المحاولة مرة أخرى.');
     } finally {
       setLoading(false);

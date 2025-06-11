@@ -15,8 +15,8 @@ export default function SignUpScreen({ navigation }) {
   const [password, setPassword] = useState('');
   const [fullName, setFullName] = useState('');
   const [role, setRole] = useState('investor');
-  const [city, setCity] = useState('');
-  const [sector, setSector] = useState('');
+  const [city, setCity] = useState('أدرار');
+  const [sector, setSector] = useState('الطاقة (النفط، الغاز، الطاقات المتجددة)');
   const [profilePicture, setProfilePicture] = useState(null);
   const [loading, setLoading] = useState(false);
   const [policyAccepted, setPolicyAccepted] = useState(false);
@@ -117,7 +117,7 @@ export default function SignUpScreen({ navigation }) {
         return;
       }
 
-      Alert.alert('تم التسجيل', 'تحقق من بريدك الإلكتروني لتأكيد الحساب!');
+      Alert.alert('تم التسجيل', 'قم بتسجيل الدخول');
       navigation.navigate('Login');
     } else {
       setLoading(false);
@@ -148,7 +148,7 @@ export default function SignUpScreen({ navigation }) {
           textAlign={I18nManager.isRTL ? 'right' : 'left'}
         />
 
-        <Text style={styles.label}>الدور</Text>
+        <Text style={styles.label} >الدور</Text>
         <View style={styles.pickerWrapper}>
           <Picker
             selectedValue={role}

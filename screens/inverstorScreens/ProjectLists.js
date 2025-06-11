@@ -24,13 +24,10 @@ export default function ProjectLists() {
       const { data, error } = await supabase
         .from('projects')
         .select('*, users:owner_id(full_name, city, sector, role, profile_picture, id)')
-    console.log('data: ', data)
       if (!error) {
-        console.log('no projects: ', error)
         setProjects(data || []);
       }
       setLoading(false);
-        console.log('done')
     };
     fetchProjects();
   }, []);
@@ -69,7 +66,9 @@ export default function ProjectLists() {
     const documentUrl = getPublicUrl('document', item.document);
 
     return (
-      <View style={styles.card}>
+      <TouchableOpacity style={styles.card}
+        onPress={()=>handleContactOwner(item)}
+      >
         <View style={styles.row}>
           <View style={{ alignItems: 'center', marginLeft: I18nManager.isRTL ? 0 : 12, marginRight: I18nManager.isRTL ? 12 : 0 }}>
             <TouchableOpacity
@@ -100,15 +99,10 @@ export default function ProjectLists() {
           <View style={{ flex: 1 }}>
             <Text style={styles.title}>{item.title}</Text>
             <Text style={styles.description}>{item.description}</Text>
-            <TouchableOpacity
-              style={styles.contactButton}
-              onPress={() => handleContactOwner(item)}
-            >
-              <Text style={styles.contactButtonText}>تواصل مع صاحب المشروع</Text>
-            </TouchableOpacity>
+
           </View>
         </View>
-      </View>
+      </TouchableOpacity>
     );
   };
 
@@ -214,6 +208,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     marginTop: 12,
     alignSelf: 'flex-end',
+    left:4
   },
   contactButtonText: {
     fontWeight: 'bold',

@@ -77,7 +77,6 @@ export default function Notifications() {
     const existingChannels = supabase.getChannels();
     existingChannels.forEach(ch => {
       if (ch.topic.includes(`contact_requests`) && ch.topic.includes(user.id)) {
-        console.log('Removing existing channel:', ch.topic);
         supabase.removeChannel(ch);
       }
     });
@@ -89,7 +88,6 @@ export default function Notifications() {
 
     // Create new unique channel
     const channelName = `contact_requests_${user.id}_${Math.random().toString(36).substr(2, 9)}`;
-    console.log('Creating channel:', channelName);
     
     channel = supabase
       .channel(channelName)
@@ -102,7 +100,6 @@ export default function Notifications() {
           filter: `receiver_id=eq.${user.id}`,
         },
         (payload) => {
-          console.log('Realtime update:', payload.eventType);
           if (mounted) {
             fetchRequests();
           }
@@ -110,7 +107,6 @@ export default function Notifications() {
       );
 
     channel.subscribe((status) => {
-      console.log('Channel status:', status, 'for channel:', channelName);
     });
 
     channelRef.current = channel;
@@ -123,11 +119,9 @@ export default function Notifications() {
   setupSubscription();
 
   return () => {
-    console.log('Cleanup called');
     mounted = false;
     
     if (channel) {
-      console.log('Removing channel:', channel.topic);
       supabase.removeChannel(channel);
     }
     
@@ -178,11 +172,11 @@ export default function Notifications() {
                 <View style={styles.senderTextContainer}>
                   <Text style={styles.senderName}>{req.sender?.full_name || 'مستخدم'}</Text>
                   <Text style={styles.senderLocation}>{req.sender?.city}</Text>
+                <Text style={styles.date}>
+                  {new Date(req.created_at).toLocaleString()}
+                </Text>
                 </View>
               </View>
-              <Text style={styles.date}>
-                {new Date(req.created_at).toLocaleString()}
-              </Text>
             </TouchableOpacity>
 
             {expanded[req.id] && (
@@ -223,18 +217,17 @@ export default function Notifications() {
   );
 }
 
-
 const styles = StyleSheet.create({
   container: { 
     flex: 1, 
     backgroundColor: '#fff', 
     padding: 16,
+    direction:'rtl'
   },
   header: {
     fontSize: 28,
     fontWeight: 'bold',
     color: '#1A1A1A',
-    textAlign: 'right',
     marginVertical: 24,
     paddingRight: 8,
   },
@@ -256,12 +249,10 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
     color: '#1A1A1A',
-    textAlign: 'right',
   },
   date: {
     fontSize: 12,
     color: '#888',
-    textAlign: 'right',
     marginRight: 8,
   },
   content: {
@@ -275,16 +266,13 @@ const styles = StyleSheet.create({
     color: '#B8860B',
     fontWeight: 'bold',
     marginBottom: 2,
-    textAlign: 'right',
   },
   message: {
     fontSize: 16,
     color: '#333',
     marginBottom: 8,
-    textAlign: 'right',
   },
   emptyText: {
-    textAlign: 'right',
     color: '#888',
     marginTop: 32,
     fontSize: 16,
@@ -314,6 +302,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
     color: '#B8860B',
+    writingDirection: 'rtl',
   },
   senderTextContainer: {
     flex: 1,
@@ -322,12 +311,12 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
     color: '#1A1A1A',
-    textAlign: 'right',
+    writingDirection: 'rtl',
   },
   senderLocation: {
     fontSize: 14,
     color: '#666',
-    textAlign: 'right',
+    writingDirection: 'rtl',
   },
   detailRow: {
     flexDirection: 'row-reverse',
@@ -339,14 +328,14 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: '#666',
     flex: 1,
-    textAlign: 'right',
+    writingDirection: 'rtl',
   },
   detailValue: {
     fontSize: 14,
     color: '#1A1A1A',
     flex: 2,
-    textAlign: 'right',
     marginRight: 8,
+    writingDirection: 'rtl',
   },
   senderDetailsSection: {
     backgroundColor: '#fff',
