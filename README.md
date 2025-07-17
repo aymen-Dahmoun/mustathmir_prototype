@@ -1,9 +1,5 @@
 # 💼 Mustathmir
 
-**Mustathmir** is a mobile application built with **React Native (Expo)** and powered by **Supabase**. It connects **investors** with **business owners**, enabling both parties to explore opportunities, communicate, and build meaningful partnerships. With role-based access, users are shown personalized content and actions based on whether they are an investor or a business owner.
-
-# 💼 Mustathmir
-
 **Mustathmir** is a role-based mobile application built with **React Native (Expo)** and powered by **Supabase**. It bridges the gap between **investors** and **business owners**, allowing both parties to connect, message, and collaborate.
 
 Users are assigned a **role** during registration (Investor or Business Owner), and the app customizes their experience based on that role — from the dashboard to the interaction options.
