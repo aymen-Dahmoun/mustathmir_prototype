@@ -47,6 +47,6 @@ const styles = StyleSheet.create({
     marginTop: 4,
     fontSize: 14,
     textAlign: 'center',
-    fontFamily: 'Cairo', // Use a font that supports Arabic if available
+    fontFamily: 'Cairo',
   },
 });
